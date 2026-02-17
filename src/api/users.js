@@ -1,7 +1,7 @@
 const BASE_URL = "https://wqumuzarlqwocwpvsgcw.supabase.co/rest/v1/users";
 
 const headers = {
-  apikey: "sb_publishable_7N5wrnWGNJaaADPaOm1tUg_gGApmMNX",
+  apikey: import.meta.env.VITE_SUPABASE_APIKEY,
   "Content-Type": "application/json"
 };
 
