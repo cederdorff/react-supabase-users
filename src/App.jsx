@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { fetchUsers, createUser, updateUser, deleteUser } from "./api/users";
 import UserForm from "./components/UserForm";
 import UserList from "./components/UserList";
@@ -9,55 +9,38 @@ function App() {
   const [error, setError] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
 
-  const loadUsers = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchUsers();
-      setUsers(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  async function loadUsers() {
+    setLoading(true);
+    setError(null);
+    const data = await fetchUsers();
+    setUsers(data);
+    setLoading(false);
+  }
 
   useEffect(() => {
     loadUsers();
-  }, [loadUsers]);
+  }, []);
 
-  const handleCreate = async userData => {
-    try {
-      setError(null);
-      await createUser(userData);
-      await loadUsers();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  async function handleCreate(userData) {
+    setError(null);
+    await createUser(userData);
+    await loadUsers();
+  }
 
-  const handleUpdate = async userData => {
-    try {
-      setError(null);
-      await updateUser(editingUser.id, userData);
-      setEditingUser(null);
-      await loadUsers();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  async function handleUpdate(userData) {
+    setError(null);
+    await updateUser(editingUser.id, userData);
+    setEditingUser(null);
+    await loadUsers();
+  }
 
-  const handleDelete = async id => {
+  async function handleDelete(id) {
     if (!window.confirm("Delete this user?")) return;
-    try {
-      setError(null);
-      await deleteUser(id);
-      if (editingUser?.id === id) setEditingUser(null);
-      await loadUsers();
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    setError(null);
+    await deleteUser(id);
+    if (editingUser?.id === id) setEditingUser(null);
+    await loadUsers();
+  }
 
   return (
     <div className="app">
