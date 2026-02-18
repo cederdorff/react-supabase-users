@@ -9,8 +9,8 @@ export default function UserForm({ onSubmit, editingUser }) {
 
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
     onSubmit({ name, mail, title, image });
     if (!editingUser) {
