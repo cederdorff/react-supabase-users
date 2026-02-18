@@ -1,32 +1,21 @@
-import { useState, useEffect } from "react";
-
-const emptyForm = { name: "", mail: "", title: "", image: "" };
+import { useState } from "react";
 
 export default function UserForm({ onSubmit, editingUser, onCancel }) {
-  const [form, setForm] = useState(emptyForm);
-
-  useEffect(() => {
-    if (editingUser) {
-      setForm({
-        name: editingUser.name || "",
-        mail: editingUser.mail || "",
-        title: editingUser.title || "",
-        image: editingUser.image || ""
-      });
-    } else {
-      setForm(emptyForm);
-    }
-  }, [editingUser]);
-
-  const handleChange = e => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const [name, setName] = useState(editingUser?.name || "");
+  const [mail, setMail] = useState(editingUser?.mail || "");
+  const [title, setTitle] = useState(editingUser?.title || "");
+  const [image, setImage] = useState(editingUser?.image || "");
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!form.name.trim() || !form.mail.trim()) return;
-    onSubmit(form);
-    if (!editingUser) setForm(emptyForm);
+
+    onSubmit({ name, mail, title, image });
+    if (!editingUser) {
+      setName("");
+      setMail("");
+      setTitle("");
+      setImage("");
+    }
   };
 
   return (
@@ -35,7 +24,14 @@ export default function UserForm({ onSubmit, editingUser, onCancel }) {
       <div className="form-grid">
         <div className="form-field">
           <label htmlFor="name">Name *</label>
-          <input id="name" name="name" placeholder="Full name" value={form.name} onChange={handleChange} required />
+          <input
+            id="name"
+            name="name"
+            placeholder="Full name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+          />
         </div>
         <div className="form-field">
           <label htmlFor="mail">Email *</label>
@@ -44,18 +40,30 @@ export default function UserForm({ onSubmit, editingUser, onCancel }) {
             name="mail"
             type="email"
             placeholder="email@example.com"
-            value={form.mail}
-            onChange={handleChange}
+            value={mail}
+            onChange={e => setMail(e.target.value)}
             required
           />
         </div>
         <div className="form-field">
           <label htmlFor="title">Title</label>
-          <input id="title" name="title" placeholder="Job title" value={form.title} onChange={handleChange} />
+          <input
+            id="title"
+            name="title"
+            placeholder="Job title"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
         </div>
         <div className="form-field">
           <label htmlFor="image">Image URL</label>
-          <input id="image" name="image" placeholder="https://..." value={form.image} onChange={handleChange} />
+          <input
+            id="image"
+            name="image"
+            placeholder="https://..."
+            value={image}
+            onChange={e => setImage(e.target.value)}
+          />
         </div>
       </div>
       <div className="form-actions">

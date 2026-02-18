@@ -15,13 +15,12 @@ function App() {
   async function readUsers() {
     const response = await fetch(USERS_ENDPOINT, { headers });
     const data = await response.json();
-    return data;
+    setUsers(data);
   }
 
   useEffect(() => {
     async function fetchData() {
-      const data = await readUsers();
-      setUsers(data);
+      await readUsers();
     }
     fetchData();
   }, []);
