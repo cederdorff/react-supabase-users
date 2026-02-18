@@ -1,6 +1,6 @@
 export default function UserCard({ user, onEdit, onDelete }) {
   return (
-    <div className="user-card">
+    <article className="user-card">
       <div className="user-avatar">
         {user.image ? (
           <img src={user.image} alt={user.name} />
@@ -21,6 +21,6 @@ export default function UserCard({ user, onEdit, onDelete }) {
           🗑️
         </button>
       </div>
-    </div>
+    </article>
   );
 }

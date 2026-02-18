@@ -1,37 +1,60 @@
 import { useState, useEffect } from "react";
-import { fetchUsers, createUser, updateUser, deleteUser } from "./api/users";
 import UserForm from "./components/UserForm";
 import UserList from "./components/UserList";
+
+const USERS_ENDPOINT = import.meta.env.VITE_SUPABASE_URL;
+const headers = {
+  apikey: import.meta.env.VITE_SUPABASE_APIKEY,
+  "Content-Type": "application/json"
+};
 
 function App() {
   const [users, setUsers] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
 
-  async function loadUsers() {
-    const data = await fetchUsers();
-    setUsers(data);
+  async function readUsers() {
+    const response = await fetch(USERS_ENDPOINT, { headers });
+    const data = await response.json();
+    return data;
   }
 
   useEffect(() => {
-    loadUsers();
+    async function fetchData() {
+      const data = await readUsers();
+      setUsers(data);
+    }
+    fetchData();
   }, []);
 
   async function handleCreate(userData) {
-    await createUser(userData);
-    await loadUsers();
+    await fetch(USERS_ENDPOINT, { method: "POST", headers, body: JSON.stringify(userData) });
+
+    await readUsers();
   }
 
   async function handleUpdate(userData) {
-    await updateUser(editingUser.id, userData);
+    await fetch(`${USERS_ENDPOINT}?id=eq.${editingUser.id}`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify(userData)
+    });
     setEditingUser(null);
-    await loadUsers();
+    await readUsers();
   }
 
   async function handleDelete(id) {
-    if (!window.confirm("Delete this user?")) return;
-    await deleteUser(id);
-    if (editingUser?.id === id) setEditingUser(null);
-    await loadUsers();
+    const deleteConfirmed = window.confirm("Delete this user?"); // Simple confirmation dialog
+
+    // If confirmed, proceed with deletion
+    if (deleteConfirmed) {
+      await fetch(`${USERS_ENDPOINT}?id=eq.${id}`, {
+        method: "DELETE",
+        headers
+      });
+
+      // After deletion, refresh the user list
+      await readUsers();
+    }
   }
 
   return (
