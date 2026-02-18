@@ -1,7 +1,6 @@
 import UserCard from "./UserCard";
 
-export default function UserList({ users, loading, onEdit, onDelete }) {
-  if (loading) return <p className="status-msg">Loading users…</p>;
+export default function UserList({ users, onEdit, onDelete }) {
   if (!users.length) return <p className="status-msg">No users found.</p>;
 
   return (

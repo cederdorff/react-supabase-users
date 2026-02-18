@@ -5,16 +5,11 @@ import UserList from "./components/UserList";
 
 function App() {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
 
   async function loadUsers() {
-    setLoading(true);
-    setError(null);
     const data = await fetchUsers();
     setUsers(data);
-    setLoading(false);
   }
 
   useEffect(() => {
@@ -22,13 +17,11 @@ function App() {
   }, []);
 
   async function handleCreate(userData) {
-    setError(null);
     await createUser(userData);
     await loadUsers();
   }
 
   async function handleUpdate(userData) {
-    setError(null);
     await updateUser(editingUser.id, userData);
     setEditingUser(null);
     await loadUsers();
@@ -36,7 +29,6 @@ function App() {
 
   async function handleDelete(id) {
     if (!window.confirm("Delete this user?")) return;
-    setError(null);
     await deleteUser(id);
     if (editingUser?.id === id) setEditingUser(null);
     await loadUsers();
@@ -48,15 +40,13 @@ function App() {
         <h1>React Supabase Users</h1>
       </header>
 
-      {error && <div className="error-msg">{error}</div>}
-
       <UserForm
         onSubmit={editingUser ? handleUpdate : handleCreate}
         editingUser={editingUser}
         onCancel={() => setEditingUser(null)}
       />
 
-      <UserList users={users} loading={loading} onEdit={setEditingUser} onDelete={handleDelete} />
+      <UserList users={users} onEdit={setEditingUser} onDelete={handleDelete} />
     </div>
   );
 }
