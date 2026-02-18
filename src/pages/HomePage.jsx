@@ -24,7 +24,10 @@ export default function HomePage() {
   }, []);
 
   async function handleDelete(id) {
+    // Confirm before deleting user
     const deleteConfirmed = window.confirm("Delete this user?");
+
+    // If confirmed, delete user and refresh list
     if (deleteConfirmed) {
       await fetch(`${URL}?id=eq.${id}`, { method: "DELETE", headers });
       await loadUsers();
