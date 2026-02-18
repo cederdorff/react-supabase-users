@@ -221,6 +221,11 @@ body {
 .user-mail {
   font-size: 0.8rem;
   color: var(--primary);
+  text-decoration: none;
+}
+
+.user-mail:hover {
+  text-decoration: underline;
 }
 
 .user-actions {
