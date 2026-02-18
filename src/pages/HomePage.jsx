@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import UserList from "../components/UserList";
 
@@ -18,7 +18,9 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    loadUsers();
+    async () => {
+      loadUsers();
+    };
   }, []);
 
   async function handleDelete(id) {
