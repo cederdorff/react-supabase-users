@@ -11,16 +11,20 @@ export default function UserCard({ user, onEdit, onDelete }) {
       <div className="user-info">
         <h3>{user.name}</h3>
         {user.title && <p className="user-title">{user.title}</p>}
-        <p className="user-mail">{user.mail}</p>
+        <address>
+          <a className="user-mail" href={`mailto:${user.mail}`}>
+            {user.mail}
+          </a>
+        </address>
       </div>
-      <div className="user-actions">
-        <button className="btn btn-edit" onClick={() => onEdit(user)} title="Edit">
+      <nav className="user-actions" aria-label="User actions">
+        <button className="btn btn-edit" onClick={() => onEdit(user)} aria-label={`Edit ${user.name}`}>
           ✏️
         </button>
-        <button className="btn btn-delete" onClick={() => onDelete(user.id)} title="Delete">
+        <button className="btn btn-delete" onClick={() => onDelete(user.id)} aria-label={`Delete ${user.name}`}>
           🗑️
         </button>
-      </div>
+      </nav>
     </article>
   );
 }

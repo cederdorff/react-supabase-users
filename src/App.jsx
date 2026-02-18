@@ -58,7 +58,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <main className="app">
       <header className="app-header">
         <h1>React Supabase Users</h1>
       </header>
@@ -70,7 +70,7 @@ function App() {
       />
 
       <UserList users={users} onEdit={setEditingUser} onDelete={handleDelete} />
-    </div>
+    </main>
   );
 }
 
