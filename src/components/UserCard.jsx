@@ -1,4 +1,6 @@
-export default function UserCard({ user, onEdit, onDelete }) {
+import { Link } from "react-router";
+
+export default function UserCard({ user, onDelete }) {
   return (
     <article className="user-card">
       <div className="user-avatar">
@@ -18,9 +20,9 @@ export default function UserCard({ user, onEdit, onDelete }) {
         </address>
       </div>
       <nav className="user-actions" aria-label="User actions">
-        <button className="btn btn-edit" onClick={() => onEdit(user)} aria-label={`Edit ${user.name}`}>
+        <Link to={`/update/${user.id}`} className="btn btn-edit" aria-label={`Edit ${user.name}`}>
           ✏️
-        </button>
+        </Link>
         <button className="btn btn-delete" onClick={() => onDelete(user.id)} aria-label={`Delete ${user.name}`}>
           🗑️
         </button>

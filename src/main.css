@@ -36,7 +36,9 @@ body {
 }
 
 .app-header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 2rem;
 }
 
@@ -105,6 +107,7 @@ body {
   margin-top: 1rem;
   display: flex;
   gap: 0.5rem;
+  justify-content: flex-end;
 }
 
 /* ---------- Buttons ---------- */
@@ -113,8 +116,12 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.85rem;
+  font-family: inherit;
   padding: 0.5rem 1.1rem;
   transition: background 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-primary {
