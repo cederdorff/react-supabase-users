@@ -5,7 +5,7 @@ export default function Header() {
     <header className="site-header">
       <div className="site-header-inner">
         <Link to="/" className="site-logo">
-          👥 Users
+          Users
         </Link>
         <Link to="/create" className="btn btn-primary">
           + New User
