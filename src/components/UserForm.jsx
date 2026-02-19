@@ -1,26 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
-export default function UserForm({ onSubmit, editingUser, onCancel }) {
-  const [name, setName] = useState(editingUser?.name || "");
-  const [mail, setMail] = useState(editingUser?.mail || "");
-  const [title, setTitle] = useState(editingUser?.title || "");
-  const [image, setImage] = useState(editingUser?.image || "");
+export default function UserForm({ onSubmit, userToUpdate }) {
+  const [name, setName] = useState(userToUpdate?.name || "");
+  const [mail, setMail] = useState(userToUpdate?.mail || "");
+  const [title, setTitle] = useState(userToUpdate?.title || "");
+  const [image, setImage] = useState(userToUpdate?.image || "");
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const navigate = useNavigate();
+
+  function handleSubmit(event) {
+    event.preventDefault();
 
     onSubmit({ name, mail, title, image });
-    if (!editingUser) {
-      setName("");
-      setMail("");
-      setTitle("");
-      setImage("");
-    }
-  };
+  }
+
+  function handleCancel() {
+    navigate(-1);
+  }
 
   return (
     <form className="user-form" onSubmit={handleSubmit}>
-      <h2>{editingUser ? "Edit User" : "Add User"}</h2>
       <div className="form-grid">
         <div className="form-field">
           <label htmlFor="name">Name *</label>
@@ -64,17 +64,16 @@ export default function UserForm({ onSubmit, editingUser, onCancel }) {
             value={image}
             onChange={e => setImage(e.target.value)}
           />
+          {image && <img src={image} alt="Preview" className="image-preview" style={{ borderRadius: "50%" }} />}
         </div>
       </div>
       <div className="form-actions">
-        <button type="submit" className="btn btn-primary">
-          {editingUser ? "Update" : "Create"}
+        <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+          Cancel
         </button>
-        {editingUser && (
-          <button type="button" className="btn btn-secondary" onClick={onCancel}>
-            Cancel
-          </button>
-        )}
+        <button type="submit" className="btn btn-primary">
+          {userToUpdate ? "Update" : "Create"}
+        </button>
       </div>
     </form>
   );

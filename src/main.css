@@ -10,6 +10,7 @@
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --radius: 10px;
+  --radius-sm: 6px;
 }
 
 * {
@@ -35,24 +36,42 @@ body {
   padding: 2rem 1rem;
 }
 
-.app-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.app-header h1 {
-  font-size: 1.75rem;
+.page-title {
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
 }
 
-.error-msg {
-  background: var(--danger);
-  color: #fff;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  margin-bottom: 1rem;
-  text-align: center;
+/* ---------- Site header ---------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.site-header-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-logo:hover {
+  color: var(--primary);
 }
 
 /* ---------- Form ---------- */
@@ -62,11 +81,6 @@ body {
   border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 2rem;
-}
-
-.user-form h2 {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
 }
 
 .form-grid {
@@ -89,7 +103,7 @@ body {
 .form-field input {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   padding: 0.55rem 0.75rem;
   color: var(--text);
   font-size: 0.9rem;
@@ -105,16 +119,36 @@ body {
   margin-top: 1rem;
   display: flex;
   gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.image-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-top: 0.5rem;
 }
 
 /* ---------- Buttons ---------- */
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
 .btn {
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.85rem;
+  font-family: inherit;
   padding: 0.5rem 1.1rem;
   transition: background 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-primary {
@@ -131,20 +165,6 @@ body {
 }
 .btn-secondary:hover {
   background: var(--border);
-}
-
-.btn-edit,
-.btn-delete {
-  background: transparent;
-  font-size: 1.1rem;
-  padding: 0.35rem 0.5rem;
-  line-height: 1;
-}
-.btn-edit:hover {
-  background: var(--surface-hover);
-}
-.btn-delete:hover {
-  background: rgba(239, 68, 68, 0.15);
 }
 
 /* ---------- User list ---------- */
@@ -169,6 +189,8 @@ body {
   align-items: center;
   gap: 1rem;
   transition: border-color 0.2s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .user-card:hover {
@@ -214,15 +236,73 @@ body {
 .user-mail {
   font-size: 0.8rem;
   color: var(--primary);
+  text-decoration: none;
 }
 
-.user-actions {
+.user-mail:hover {
+  text-decoration: underline;
+}
+
+/* ---------- User detail ---------- */
+.user-detail {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
   display: flex;
-  gap: 0.25rem;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.user-detail-avatar,
+.avatar-placeholder.large {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-placeholder.large {
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  color: var(--text-muted);
+  background: var(--primary);
+}
+
+.user-detail-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-detail-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.user-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 560px) {
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .user-detail {
+    flex-direction: column;
+  }
+
+  .user-detail-avatar,
+  .avatar-placeholder.large {
+    width: 100%;
+    height: 200px;
+    border-radius: var(--radius);
   }
 }
