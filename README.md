@@ -13,7 +13,7 @@
 - [4. Security og Row Level Security (RLS)](#4-security-og-row-level-security-rls)
 - [5. Test i browser](#5-test-i-browser)
 - [6. Test REST API med Thunderclient](#6-test-rest-api-med-thunderclient)
-- [7. Filtrering i REST API](#7-filtrering-i-rest-api)
+- [7. Filtrering og sortering i REST API](#7-filtrering-og-sortering-i-rest-api)
 
 ---
 
@@ -273,39 +273,54 @@ DELETE bruges til at **slette en række** fra databasen. Ligesom PATCH bruger vi
 
 ---
 
-## 7. Filtrering i REST API
+## 7. Filtrering og sortering i REST API
 
-Supabase bruger **query parameters** til filtrering direkte i URL'en — ingen ekstra kode nødvendig.
+Indtil nu har vi hentet **alle** rækker fra tabellen med en simpel GET-request. Men i praksis vil man sjældent have brug for hele datasættet — man vil måske kun hente ét bestemt produkt, produkter under en bestemt pris, eller have resultaterne sorteret.
+
+Supabase understøtter filtrering, sortering og paginering direkte via **query parameters** i URL'en. Det sker på databaseniveau, så kun de relevante rækker sendes tilbage — det er langt mere effektivt end at hente alt og filtrere i JavaScript bagefter.
 
 ### Syntaks
 
+Query parameters tilføjes i enden af URL'en efter et `?`. Har du flere parametre, adskilles de med `&`:
+
 ```
 /rest/v1/products?<kolonne>=<operator>.<værdi>
+/rest/v1/products?<kolonne>=<operator>.<værdi>&<kolonne2>=<operator2>.<værdi2>
 ```
 
 ### Operatorer
+
+Operatoren bestemmer _hvordan_ værdien sammenlignes med kolonnen:
 
 | Operator | Betydning                 | Eksempel             |
 | -------- | ------------------------- | -------------------- |
 | `eq`     | Lig med (equals)          | `?id=eq.1`           |
 | `neq`    | Ikke lig med              | `?id=neq.1`          |
-| `lt`     | Mindre end                | `?price=lt.1000`     |
+| `lt`     | Mindre end (less than)    | `?price=lt.1000`     |
 | `lte`    | Mindre end eller lig med  | `?price=lte.1000`    |
-| `gt`     | Større end                | `?price=gt.5000`     |
+| `gt`     | Større end (greater than) | `?price=gt.5000`     |
 | `gte`    | Større end eller lig med  | `?price=gte.5000`    |
-| `like`   | Mønster (case-sensitive)  | `?title=like.Mac*`   |
+| `like`   | Mønster (case-sensitiv)   | `?title=like.Mac*`   |
 | `ilike`  | Mønster (case-insensitiv) | `?title=ilike.*mac*` |
-| `is`     | Er null/true/false        | `?image=is.null`     |
+| `is`     | Er null / true / false    | `?image=is.null`     |
+
+> 💡 I `like` og `ilike` bruges `*` som wildcard — fx `*mac*` matcher alt der _indeholder_ "mac", mens `mac*` matcher alt der _starter med_ "mac".
+
+---
 
 ### Eksempler
 
-**Hent produkt med id = 1:**
+**Hent ét bestemt produkt via id:**
+
+Bruges fx når du vil hente et specifikt produkt til en detaljevisning.
 
 ```
 /rest/v1/products?id=eq.1
 ```
 
 **Hent produkter billigere end kr. 1.000:**
+
+Nyttigt til at filtrere på pris — fx vise "budget"-produkter.
 
 ```
 /rest/v1/products?price=lt.1000
@@ -319,35 +334,47 @@ Supabase bruger **query parameters** til filtrering direkte i URL'en — ingen e
 
 **Søg produkter der indeholder "mac" (case-insensitiv):**
 
+`ilike` bruges til simpel tekstsøgning. `*mac*` betyder "indeholder mac" — uanset store/små bogstaver.
+
 ```
 /rest/v1/products?title=ilike.*mac*
 ```
 
-**Sortering — billigste først:**
+---
+
+### Sortering
+
+Brug `order`-parameteren til at sortere resultater. Angiv kolonnenavn efterfulgt af `.asc` (stigende) eller `.desc` (faldende):
+
+**Billigste først:**
 
 ```
 /rest/v1/products?order=price.asc
 ```
 
-**Sortering — dyreste først:**
+**Dyreste først:**
 
 ```
 /rest/v1/products?order=price.desc
 ```
 
-**Kombiner filtrering og sortering:**
+---
+
+### Kombiner filtrering, sortering og limit
+
+Du kan kombinere flere parametre med `&`. Herunder hentes produkter under kr. 5.000, sorteret billigste først, og begrænset til maks 5 resultater:
 
 ```
-/rest/v1/products?price=lt.5000&order=price.asc
+/rest/v1/products?price=lt.5000&order=price.asc&limit=5
 ```
 
-**Begræns antal resultater (limit):**
+`limit` er praktisk til paginering eller til at undgå at hente for mange rækker på én gang.
 
-```
-/rest/v1/products?limit=5
-```
+---
 
 ### JavaScript fetch med filtrering
+
+Filtrene er blot en del af URL-strengen — der er intet nyt at lære i selve `fetch`-kaldet:
 
 ```js
 // Hent de 5 billigste produkter under kr. 5.000
