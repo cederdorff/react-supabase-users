@@ -18,9 +18,7 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    (async () => {
-      await loadUsers();
-    })();
+    loadUsers();
   }, []);
 
   async function handleDelete(id) {
