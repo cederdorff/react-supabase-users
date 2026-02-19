@@ -24,18 +24,15 @@ export default function UpdatePage() {
 
   async function handleSubmit(userData) {
     await fetch(`${URL}?id=eq.${id}`, { method: "PATCH", headers, body: JSON.stringify(userData) });
-    navigate("/");
+    navigate(`/users/${id}`);
   }
 
   if (!user) return <p className="status-msg">Loading…</p>;
 
   return (
     <main className="app">
-      <header className="app-header">
-        <h1>Update User</h1>
-      </header>
-
-      <UserForm onSubmit={handleSubmit} editingUser={user} />
+      <h1 className="page-title">Update User</h1>
+      <UserForm onSubmit={handleSubmit} userToUpdate={user} />
     </main>
   );
 }

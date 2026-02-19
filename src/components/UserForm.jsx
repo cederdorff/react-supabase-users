@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-export default function UserForm({ onSubmit, editingUser }) {
-  const [name, setName] = useState(editingUser?.name || "");
-  const [mail, setMail] = useState(editingUser?.mail || "");
-  const [title, setTitle] = useState(editingUser?.title || "");
-  const [image, setImage] = useState(editingUser?.image || "");
+export default function UserForm({ onSubmit, userToUpdate }) {
+  const [name, setName] = useState(userToUpdate?.name || "");
+  const [mail, setMail] = useState(userToUpdate?.mail || "");
+  const [title, setTitle] = useState(userToUpdate?.title || "");
+  const [image, setImage] = useState(userToUpdate?.image || "");
 
   const navigate = useNavigate();
 
@@ -13,12 +13,6 @@ export default function UserForm({ onSubmit, editingUser }) {
     event.preventDefault();
 
     onSubmit({ name, mail, title, image });
-    if (!editingUser) {
-      setName("");
-      setMail("");
-      setTitle("");
-      setImage("");
-    }
   }
 
   function handleCancel() {
@@ -27,7 +21,6 @@ export default function UserForm({ onSubmit, editingUser }) {
 
   return (
     <form className="user-form" onSubmit={handleSubmit}>
-      <h2>{editingUser ? "Update User" : "Create User"}</h2>
       <div className="form-grid">
         <div className="form-field">
           <label htmlFor="name">Name *</label>
@@ -71,6 +64,7 @@ export default function UserForm({ onSubmit, editingUser }) {
             value={image}
             onChange={e => setImage(e.target.value)}
           />
+          {image && <img src={image} alt="Preview" className="image-preview" style={{ borderRadius: "50%" }} />}
         </div>
       </div>
       <div className="form-actions">
@@ -78,7 +72,7 @@ export default function UserForm({ onSubmit, editingUser }) {
           Cancel
         </button>
         <button type="submit" className="btn btn-primary">
-          {editingUser ? "Update" : "Create"}
+          {userToUpdate ? "Update" : "Create"}
         </button>
       </div>
     </form>

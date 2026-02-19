@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import UserList from "../components/UserList";
+import UserCard from "../components/UserCard";
 
 const URL = import.meta.env.VITE_SUPABASE_URL;
 const headers = {
@@ -11,37 +10,23 @@ const headers = {
 export default function HomePage() {
   const [users, setUsers] = useState([]);
 
-  async function loadUsers() {
-    const response = await fetch(URL, { headers });
-    const data = await response.json();
-    setUsers(data);
-  }
-
   useEffect(() => {
-    loadUsers(); // ignore this warning
-  }, []);
-
-  async function handleDelete(id) {
-    // Confirm before deleting user
-    const deleteConfirmed = window.confirm("Delete this user?");
-
-    // If confirmed, delete user and refresh list
-    if (deleteConfirmed) {
-      await fetch(`${URL}?id=eq.${id}`, { method: "DELETE", headers });
-      await loadUsers();
+    async function loadUsers() {
+      const response = await fetch(URL, { headers });
+      const data = await response.json();
+      setUsers(data);
     }
-  }
+    loadUsers();
+  }, []);
 
   return (
     <main className="app">
-      <header className="app-header">
-        <h1>React Supabase Users</h1>
-        <Link to="/create" className="btn btn-primary">
-          + New User
-        </Link>
-      </header>
-
-      <UserList users={users} onDelete={handleDelete} />
+      <h1 className="page-title">All Users</h1>
+      <section className="user-list">
+        {users.map(user => (
+          <UserCard key={user.id} user={user} />
+        ))}
+      </section>
     </main>
   );
 }

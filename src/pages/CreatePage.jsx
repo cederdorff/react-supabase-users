@@ -17,10 +17,7 @@ export default function CreatePage() {
 
   return (
     <main className="app">
-      <header className="app-header">
-        <h1>Create User</h1>
-      </header>
-
+      <h1 className="page-title">Create User</h1>
       <UserForm onSubmit={handleSubmit} />
     </main>
   );
