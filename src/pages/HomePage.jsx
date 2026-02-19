@@ -18,7 +18,7 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    loadUsers();
+    loadUsers(); // ignore this warning
   }, []);
 
   async function handleDelete(id) {
