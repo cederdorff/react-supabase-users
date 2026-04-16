@@ -56,14 +56,14 @@ Nu har du:
 
 **Table name: users**
 
-| column     | type               |
-| ---------- | ------------------ |
-| id         | int8 (primary key) |
-| created_at | timestamp          |
-| name       | text               |
-| mail       | text               |
-| title      | text               |
-| image      | text               |
+| column     | type                               |
+| ---------- | ---------------------------------- |
+| id         | int8 (primary key)                 |
+| created_at | timestamp (default value: `now()`) |
+| name       | text                               |
+| mail       | text                               |
+| title      | text                               |
+| image      | text                               |
 
 - Klik **"Save"**
 
@@ -192,8 +192,8 @@ Hvis vi skulle gøre det her i JavaScript, vil det se sådan ud — men det vent
 ```js
 const response = await fetch("https://xyz.supabase.co/rest/v1/users", {
   headers: {
-    apikey: "din_sb_publishable_xyz"
-  }
+    apikey: "din_sb_publishable_xyz",
+  },
 });
 
 const data = await response.json();
@@ -239,14 +239,14 @@ await fetch("https://xyz.supabase.co/rest/v1/users", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    apikey: "din_sb_publishable_xyz"
+    apikey: "din_sb_publishable_xyz",
   },
   body: JSON.stringify({
     name: "Jane Doe",
     mail: "jane@example.com",
     title: "Frontend Developer",
-    image: "https://randomuser.me/api/portraits/women/44.jpg"
-  })
+    image: "https://randomuser.me/api/portraits/women/44.jpg",
+  }),
 });
 ```
 
@@ -300,11 +300,11 @@ await fetch(`https://xyz.supabase.co/rest/v1/users?id=eq.${id}`, {
   method: "PATCH",
   headers: {
     "Content-Type": "application/json",
-    apikey: "din_sb_publishable_xyz"
+    apikey: "din_sb_publishable_xyz",
   },
   body: JSON.stringify({
-    title: "Senior Frontend Developer"
-  })
+    title: "Senior Frontend Developer",
+  }),
 });
 ```
 
@@ -338,8 +338,8 @@ const id = 1;
 await fetch(`https://xyz.supabase.co/rest/v1/users?id=eq.${id}`, {
   method: "DELETE",
   headers: {
-    apikey: "din_sb_publishable_xyz"
-  }
+    apikey: "din_sb_publishable_xyz",
+  },
 });
 ```
 
@@ -472,11 +472,14 @@ Filtrene er blot en del af URL-strengen — der er intet nyt at lære i selve `f
 
 ```js
 // Hent de 5 første brugere med "developer" i titlen, sorteret alfabetisk
-const response = await fetch("https://xyz.supabase.co/rest/v1/users?title=ilike.*developer*&order=name.asc&limit=5", {
-  headers: {
-    apikey: "din_sb_publishable_xyz"
-  }
-});
+const response = await fetch(
+  "https://xyz.supabase.co/rest/v1/users?title=ilike.*developer*&order=name.asc&limit=5",
+  {
+    headers: {
+      apikey: "din_sb_publishable_xyz",
+    },
+  },
+);
 
 const data = await response.json();
 console.log(data);
@@ -494,9 +497,9 @@ const response = await fetch(
   `https://xyz.supabase.co/rest/v1/users?title=ilike.*${search}*&order=${order}.${orderDirection}&limit=${limit}`,
   {
     headers: {
-      apikey: "din_sb_publishable_xyz"
-    }
-  }
+      apikey: "din_sb_publishable_xyz",
+    },
+  },
 );
 
 const data = await response.json();
